@@ -17,6 +17,9 @@ package net.ypresto.timbertreeutils;
 
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import timber.log.Timber;
 
 /**
@@ -47,7 +50,7 @@ public class ThrowErrorTree extends Timber.Tree {
      * @param logPriority          Minimum log priority to throw error. Expects one of constants defined in {@link Log}.
      * @param logExclusionStrategy Strategy used to skip throwing error.
      */
-    public ThrowErrorTree(int logPriority, LogExclusionStrategy logExclusionStrategy) {
+    public ThrowErrorTree(int logPriority, @Nullable LogExclusionStrategy logExclusionStrategy) {
         mLogPriority = logPriority;
         mLogExclusionStrategy = logExclusionStrategy != null ? logExclusionStrategy : NullLogExclusionStrategy.INSTANCE;
     }
@@ -58,7 +61,7 @@ public class ThrowErrorTree extends Timber.Tree {
     }
 
     @Override
-    protected void log(int priority, String tag, String message, Throwable t) {
+    protected void log(int priority, @Nullable String tag, @NotNull String message, @Nullable Throwable t) {
         if (mLogExclusionStrategy.shouldSkipLog(priority, tag, message, t)) {
             return;
         }

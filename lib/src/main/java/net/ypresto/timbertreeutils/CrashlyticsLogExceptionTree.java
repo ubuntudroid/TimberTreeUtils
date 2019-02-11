@@ -19,6 +19,9 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import timber.log.Timber;
 
 /**
@@ -49,7 +52,7 @@ public class CrashlyticsLogExceptionTree extends Timber.Tree {
      * @param logPriority          Minimum log priority to send exception. Expects one of constants defined in {@link Log}.
      * @param logExclusionStrategy Strategy used to skip throwing error for log.
      */
-    public CrashlyticsLogExceptionTree(int logPriority, LogExclusionStrategy logExclusionStrategy) {
+    public CrashlyticsLogExceptionTree(int logPriority, @Nullable LogExclusionStrategy logExclusionStrategy) {
         // Ensure crashlytics class is available, fail-fast if not available.
         Crashlytics.class.getCanonicalName();
         mLogPriority = logPriority;
@@ -62,7 +65,7 @@ public class CrashlyticsLogExceptionTree extends Timber.Tree {
     }
 
     @Override
-    protected void log(int priority, String tag, String message, Throwable t) {
+    protected void log(int priority, @Nullable String tag, @NotNull String message, @Nullable Throwable t) {
         if (mLogExclusionStrategy.shouldSkipLog(priority, tag, message, t)) {
             return;
         }

@@ -26,12 +26,12 @@ public class CrashlyticsLogTreeTest {
     @Test
     public void testIsLoggable() throws Exception {
         CrashlyticsLogTree tree = new CrashlyticsLogTree();
-        assertTrue(tree.isLoggable(Log.WARN));
-        assertFalse(tree.isLoggable(Log.INFO));
+        assertTrue(tree.isLoggable(null, Log.WARN));
+        assertFalse(tree.isLoggable(null, Log.INFO));
 
         tree = new CrashlyticsLogTree(Log.INFO);
-        assertTrue(tree.isLoggable(Log.INFO));
-        assertFalse(tree.isLoggable(Log.DEBUG));
+        assertTrue(tree.isLoggable(null, Log.INFO));
+        assertFalse(tree.isLoggable(null, Log.DEBUG));
     }
 
     // TODO: Test on Crashlytics static method

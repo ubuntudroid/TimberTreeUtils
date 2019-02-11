@@ -15,6 +15,9 @@
  */
 package net.ypresto.timbertreeutils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface LogExclusionStrategy {
     /**
      * @param priority Log priority.
@@ -24,5 +27,5 @@ public interface LogExclusionStrategy {
      * @return {@code true} if the log should be skipped, otherwise {@code false}.
      * @see timber.log.Timber.Tree#log(int, String, String, Throwable)
      */
-    boolean shouldSkipLog(int priority, String tag, String message, Throwable t);
+    boolean shouldSkipLog(int priority, @Nullable String tag, @NotNull String message, @Nullable Throwable t);
 }
