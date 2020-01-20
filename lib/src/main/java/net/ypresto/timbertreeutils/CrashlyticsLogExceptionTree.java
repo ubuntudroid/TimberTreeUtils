@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Yuya Tanaka
+ * Copyright (C) 2015 Yuya Tanaka, 2020 Sven Bendel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package net.ypresto.timbertreeutils;
 
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,30 +33,36 @@ import timber.log.Timber;
 public class CrashlyticsLogExceptionTree extends Timber.Tree {
     private final int mLogPriority;
     private final LogExclusionStrategy mLogExclusionStrategy;
+    private final FirebaseCrashlytics mCrashlytics;
 
     /**
      * Create instance with default log priority of ERROR.
+     *
+     * @param crashlytics FirebaseCrashlytics instance
      */
-    public CrashlyticsLogExceptionTree() {
-        this(Log.ERROR);
+    public CrashlyticsLogExceptionTree(FirebaseCrashlytics crashlytics) {
+        this(Log.ERROR, crashlytics);
     }
 
     /**
      * @param logPriority Minimum log priority to send exception. Expects one of constants defined in {@link Log}.
+     * @param crashlytics FirebaseCrashlytics instance
      */
-    public CrashlyticsLogExceptionTree(int logPriority) {
-        this(logPriority, null);
+    public CrashlyticsLogExceptionTree(int logPriority, FirebaseCrashlytics crashlytics) {
+        this(logPriority, null, crashlytics);
     }
 
     /**
      * @param logPriority          Minimum log priority to send exception. Expects one of constants defined in {@link Log}.
      * @param logExclusionStrategy Strategy used to skip throwing error for log.
+     * @param crashlytics FirebaseCrashlytics instance
      */
-    public CrashlyticsLogExceptionTree(int logPriority, @Nullable LogExclusionStrategy logExclusionStrategy) {
+    public CrashlyticsLogExceptionTree(int logPriority, @Nullable LogExclusionStrategy logExclusionStrategy, FirebaseCrashlytics crashlytics) {
         // Ensure crashlytics class is available, fail-fast if not available.
-        Crashlytics.class.getCanonicalName();
+        FirebaseCrashlytics.class.getCanonicalName();
         mLogPriority = logPriority;
         mLogExclusionStrategy = logExclusionStrategy != null ? logExclusionStrategy : NullLogExclusionStrategy.INSTANCE;
+        mCrashlytics = crashlytics;
     }
 
     @Override
@@ -71,10 +77,10 @@ public class CrashlyticsLogExceptionTree extends Timber.Tree {
         }
 
         if (t != null) {
-            Crashlytics.logException(t);
+            mCrashlytics.recordException(t);
         } else {
             String formattedMessage = LogMessageHelper.format(priority, tag, message);
-            Crashlytics.logException(new StackTraceRecorder(formattedMessage));
+            mCrashlytics.recordException(new StackTraceRecorder(formattedMessage));
         }
     }
 }

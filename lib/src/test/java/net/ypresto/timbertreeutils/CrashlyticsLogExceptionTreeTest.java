@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Yuya Tanaka
+ * Copyright (C) 2015 Yuya Tanaka, 2020 Sven Bendel
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package net.ypresto.timbertreeutils;
 
 import android.util.Log;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -25,11 +27,11 @@ import static org.junit.Assert.assertTrue;
 public class CrashlyticsLogExceptionTreeTest {
     @Test
     public void testIsLoggable() throws Exception {
-        CrashlyticsLogExceptionTree tree = new CrashlyticsLogExceptionTree();
+        CrashlyticsLogExceptionTree tree = new CrashlyticsLogExceptionTree(FirebaseCrashlytics.getInstance());
         assertTrue(tree.isLoggable(Log.ERROR));
         assertFalse(tree.isLoggable(Log.WARN));
 
-        tree = new CrashlyticsLogExceptionTree(Log.INFO);
+        tree = new CrashlyticsLogExceptionTree(Log.INFO, FirebaseCrashlytics.getInstance());
         assertTrue(tree.isLoggable(Log.INFO));
         assertFalse(tree.isLoggable(Log.DEBUG));
     }

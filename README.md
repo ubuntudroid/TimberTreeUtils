@@ -1,8 +1,10 @@
+Based on Yuya Tanaka's excellent work (and Wrywulf's [updates](https://github.com/Wrywulf/TimberTreeUtils)) on [TimberTreeUtils](https://github.com/ypresto/TimberTreeUtils), but updated to work with the Firebase Crashlytics SDK.
+
 TimberTreeUtils
 ===============
 
 Set of [timber](https://github.com/JakeWharton/timber) trees for
-[Crashlytics](https://fabric.io/kits/android/crashlytics) and debugging.
+[Crashlytics](https://firebase.google.com/docs/crashlytics) and debugging.
 
 
 Usage
@@ -11,7 +13,7 @@ Usage
 This library only contains `Timber.Tree` implementations. Just plant it to Timber.
 
 ```java
-Timber.plant(new CrashlyticsLogExceptionTree())
+Timber.plant(new CrashlyticsLogExceptionTree(FirebaseCrashlytics.getInstance()))
 ```
 
 
@@ -20,14 +22,14 @@ Trees
 
 ### CrashlyticsLogExceptionTree (Default log level: ERROR)
 
-Sends non-fatal exception to Crashlytics with `Crashlytics.logException()`.
+Sends non-fatal exception to Crashlytics with `FirebaseCrashlytics.recordException()`.
 
 If no throwable is passed, it generates stack trace from caller of Timber.e() or etc.
 NOTE: Stack trace elements of timber code are automatically removed before sent.
 
 ### CrashlyticsLogTree (Default log level: WARN)
 
-Records log to Crashlytics with `Crashlytics.log()`.
+Records log to Crashlytics with `FirebaseCrashlytics.log()`.
 
 Recorded logs will be shown in each Crashes/Non-Fatals report.
 
@@ -44,7 +46,7 @@ Filtering logs
 ### Specifying minimum log level
 
 ```java
-CrashlyticsLogTree tree = new CrashlyticsLogTree(Log.INFO);
+CrashlyticsLogTree tree = new CrashlyticsLogTree(Log.INFO, FirebaseCrashlytics.getInstance());
 ```
 
 ### Excluding log by custom logic
@@ -62,13 +64,22 @@ ThrowErrorTree tree = new ThrowErrorTree(Log.ERROR, new LogExclusionStrategy() {
 Installation
 ----
 
-Available from jCenter.
+Available from jitpack.
 
 Gradle:
 
 ```groovy
+// main build.gradle
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+
+// project/app build.gradle
 dependencies {
-    compile 'net.ypresto.timbertreeutils:timbertreeutils:1.0.0'
+    compile 'com.github.ubuntudroid.timbertreeutils:timbertreeutils:2.0.0'
 }
 ```
 
@@ -77,7 +88,7 @@ LICENSE
 ----
 
 ```
-Copyright (C) 2015 Yuya Tanaka
+Copyright (C) 2015 Yuya Tanaka, 2020 Sven Bendel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -3,25 +3,20 @@ buildscript {
         google()
         jcenter()
     }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9'
-    }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 repositories {
     google()
-    maven { url 'https://maven.fabric.io/public' }
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -42,20 +37,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    compileOnly 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    compileOnly 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.23.0'
-    testImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
-}
-
-publish {
-    desc = 'Set of timber trees for Crashlytics and debugging.'
-    userOrg = 'ypresto'
-    groupId = 'net.ypresto.timbertreeutils'
-    artifactId = 'timbertreeutils'
-    publishVersion = '1.0.1-SNAPSHOT'
-    licences = ['Apache-2.0']
-    website = 'https://github.com/ypresto/TimberTreeUtils'
-    autoPublish = false
-    dryRun = false
+    testImplementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 }
